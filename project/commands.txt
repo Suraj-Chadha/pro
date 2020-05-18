@@ -1,0 +1,24 @@
+cd C:\Users\kaust\Desktop\filesRandom\sem6\sem6\CC\Assignment1
+
+cd project
+cd orchestrator_microservice
+sudo nano orchestrator.py
+sudo docker-compose build
+sudo docker-compose up
+
+sudo docker ps -a
+sudo docker stop
+sudo docker rm
+
+cd CC_try/CC_AS_2 
+cd User_microservice
+cd ride_microservice
+sudo nano User_microservice/1.py
+
+
+netstat -ano | findstr :yourPortNumber
+taskkill /PID typeyourPIDhere /F
+
+sudo kill $(sudo lsof -t -i:3000)
+
+sudo lsof -i -P -n

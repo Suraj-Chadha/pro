@@ -1,0 +1,92 @@
+from flask import Flask
+import os
+import flask
+import json as j
+import pika
+
+import sqlalchemy as sql
+import sqlalchemy.orm as orm
+import flask_sqlalchemy_session as fss
+from flask import abort, Response, request
+
+# from flask_sqlalchemy_session import current_session as s
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import scoped_session,sessionmaker,aliased,relationship
+
+# from datetime import datetime
+# import requests
+# import traceback
+# import hashlib
+# import re as regex
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello World! I have been seen'
+
+@app.route("/read" , methods={'POST'})
+def readAllReq():
+    body_ = request.get_json()
+    action = body_["action"]
+
+    #-------------------------HANDLING USER ACTIONS HERE----------------------------------#
+
+    if(action == "get_user"):
+        body_["connect_api"] = "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+       # channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+       # connection.close()
+        return Response("action = get_user")
+    elif(action == "delete_user"):
+	body_["connect_api"]= "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+        channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+        connection.close()
+        return Response("action = delete_user")
+    elif(action == "upcoming_rides"):
+	body_["connect_api"]= "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+        channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+        connection.close()
+        return Response("action = upcoming_rides")
+    elif(action == "ride_info"):
+	body_["connect_api"]= "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+        channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+        connection.close()
+        return Response("action =  ride_info")
+    elif(action == 'list_all_users'):
+	body_["connect_api"]= "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+        channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+        connection.close()
+        return Response('action = list_all_user')
+    elif(action == "deldbuser"):
+	body_["connect_api"]= "user"
+        json_body = j.dumps(body)
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        channel = connection.channel()
+        channel.queue_declare(queue="readQ")
+        channel.basic_publish(exchange="", routing_key='readQ', body=json_body)
+        connection.close()
+        return Response('action = deldbuser')
+
+if __name__ == '__main__':
+   app.run(host='0.0.0.0',port=5000,debug=True)

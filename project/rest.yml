@@ -1,0 +1,85 @@
+    master:       
+    	container_name: MS
+        restart: always
+        build: master-slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+
+    slave1:       
+        container_name: MS1
+        restart: always
+        build: slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+
+    slave2:       
+        container_name: MS2
+        restart: always
+        build: slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+
+
+
+stdin_open: true
+        tty: true
+        volumes:
+            - ./db
+
+
+    master:       
+        container_name: MS
+        restart: always
+        build: master-slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+
+    persistentdb:       
+        container_name: pdb
+        restart: always
+        build: persistentdb
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+        volumes: 
+            - ./appdata:/app/pdb
+
+    slave1:       
+        container_name: MS1
+        restart: always
+        build: slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+        volumes:
+            - ./appdata:/app/pdb
+
+
+
+
+
+------------------------
+ master:       
+        container_name: MS
+        restart: always
+        build: master-slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock         
+
+    slave1:       
+        container_name: MS1
+        restart: always
+        build: slave
+        depends_on:
+            - rabbitmq
+            - orchestrator_service
+        volumes:
+            - ./appdata:/app/pdb
+            - /var/run/docker.sock:/var/run/docker.sock
